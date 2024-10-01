@@ -38,5 +38,5 @@ scripts:
   test:
     run: |
       dart run melos exec -c 1 -- \
-        flutter test -r github --no-test-assets
+        flutter test -r github
     description: Run `flutter test` to validate all tests for all packages
