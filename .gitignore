@@ -1,0 +1,10 @@
+
+# FVM Version Cache
+.fvm/
+
+.idea
+.dart_tool/
+.vscode/
+packages/**/pubspec.lock
+
+pubspec_overrides.yaml

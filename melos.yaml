@@ -1,0 +1,42 @@
+name: flutter_locations
+
+packages:
+  - apps/**
+  - packages/**
+
+command:
+  version:
+    branch: master
+
+scripts:
+  lint:all:
+    run: dart run melos run analyze && dart run melos run format-check && dart run melos run test
+    description: Run all static analysis checks.
+
+  get:
+    run: |
+      melos exec -c 1 -- "flutter pub get"
+      melos exec --scope="*example*" -c 1 -- "flutter pub get"
+
+  upgrade:
+    run: melos exec -c 1 -- "flutter pub upgrade"
+
+  analyze:
+    run: |
+      dart run melos exec -c 1 -- \
+        flutter analyze --fatal-infos
+    description: Run `flutter analyze` for all packages.
+
+  format:
+    run: dart run melos exec dart format .
+    description: Run `dart format` for all packages.
+
+  format-check:
+    run: dart run melos exec dart format . --set-exit-if-changed
+    description: Run `dart format` checks for all packages.
+
+  test:
+    run: |
+      dart run melos exec -c 1 -- \
+        flutter test -r github --no-test-assets
+    description: Run `flutter test` to validate all tests for all packages

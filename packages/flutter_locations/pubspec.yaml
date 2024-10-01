@@ -1,0 +1,26 @@
+name: flutter_locations
+description: "A user story regarding anything that has to do with a location. From finding items on a map, calculating a route and tracking your movement."
+version: 0.0.1
+homepage: https://github.com/Iconica-Development
+
+publish_to: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dart_locations_repository_interface:
+    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
+    version: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4
+  flutter_iconica_analysis:
+    git:
+      url: https://github.com/Iconica-Development/flutter_iconica_analysis
+      ref: 7.0.0
