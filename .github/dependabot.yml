@@ -1,0 +1,12 @@
+version: 2
+
+updates:
+  - package-ecosystem: "pub"
+    directory: "/packages/flutter_locations"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/dart_locations_repository_interface"
+    schedule:
+      interval: "weekly"

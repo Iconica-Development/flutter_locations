@@ -8,3 +8,5 @@
 packages/**/pubspec.lock
 
 pubspec_overrides.yaml
+
+build/

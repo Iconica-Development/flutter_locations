@@ -11,7 +11,7 @@ class LocationsService {
 
   final LocationsRepositoryInterface _locationsRepositoryInterface;
 
-  /// Checks if the internal interface uses the location 
+  /// Checks if the internal interface uses the location
   bool get isLocalData =>
       _locationsRepositoryInterface is LocationsLocalRepository;
 }
