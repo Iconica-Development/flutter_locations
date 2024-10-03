@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_locations/src/config/flutter_locations_config.dart";
 import "package:flutter_locations/src/config/locations_translations.dart";
 import "package:flutter_locations/src/config/map_options.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/base_screen.dart";
@@ -10,6 +11,7 @@ class LocationsOptions {
     this.translations = const LocationsTranslations.empty(),
     this.builder = DefaultLocationsBaseScreen.builder,
     this.mapOptions = const LocationsMapOptions.empty(),
+    this.mapConfiguration = const PlatformMapConfiguration.empty(),
   });
 
   /// The default translations used.
@@ -20,6 +22,9 @@ class LocationsOptions {
 
   /// The map options.
   final LocationsMapOptions mapOptions;
+
+  /// The platform independent map configuration.
+  final PlatformMapConfiguration mapConfiguration;
 }
 
 ///

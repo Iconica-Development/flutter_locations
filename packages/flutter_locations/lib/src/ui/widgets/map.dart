@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_locations/src/config/flutter_locations_config.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
-import "package:latlong2/latlong.dart";
 import "package:platform_maps_flutter/platform_maps_flutter.dart"
     as platform_maps;
 
@@ -17,51 +17,72 @@ class LocationsMap extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options = LocationsScope.of(context).options.mapOptions;
-    var defaultZoom = (options.initialLocation == null) ? 7.25 : 10.0;
+    var locationsOptions = LocationsScope.of(context).options;
+    var mapOptions = locationsOptions.mapOptions;
+    var config = locationsOptions.mapConfiguration;
+    var defaultZoom = config.initialCameraZoom;
+    var initialZoom = mapOptions.zoom ?? defaultZoom;
+    var initialLocation = config.initialCameraPosition;
     var controller = useState(MapController());
     var platformMapController =
         useState<platform_maps.PlatformMapController?>(null);
 
+    // ignore: lines_longer_than_80_chars, flutter_style_todos
+    // TODO: config.poiListStyle is not used and can only be used directly in component GoogleMap.style, controller setMapStyle is deprecated.
+
     Widget buildPlatformSpecificMap() => platform_maps.PlatformMap(
-          myLocationEnabled: false,
-          zoomControlsEnabled: false,
-          zoomGesturesEnabled: false,
+          myLocationEnabled: config.isMyLocationEnabled,
+          zoomControlsEnabled: config.isZoomCameraControlEnabled,
+          zoomGesturesEnabled: config.isZoomCameraControlEnabled,
+          minMaxZoomPreference: platform_maps.MinMaxZoomPreference(
+            config.minimumCameraZoomLevel,
+            config.maximumCameraZoomLevel,
+          ),
+          rotateGesturesEnabled: config.isRotateCameraControlEnabled,
+          scrollGesturesEnabled: config.isMoveCameraControlEnabled,
+          tiltGesturesEnabled: config.isTiltCameraControlEnabled,
+          trafficEnabled: config.isTrafficEnabled,
+          compassEnabled: config.isCompassShown,
+          mapType: switch (config.mapType) {
+            MapType.normal => platform_maps.MapType.normal,
+            MapType.satellite => platform_maps.MapType.satellite,
+            MapType.hybrid => platform_maps.MapType.hybrid,
+          },
           initialCameraPosition: platform_maps.CameraPosition(
             target: platform_maps.LatLng(
-              options.initialLocation?.latitude ?? 0,
-              options.initialLocation?.longitude ?? 0,
+              initialLocation.latitude,
+              initialLocation.longitude,
             ),
-            zoom: options.zoom ?? 10.0,
+            zoom: initialZoom,
+            tilt: config.initialCameraTilt,
+            bearing: config.initialCameraBearing,
           ),
           onMapCreated: (controller) {
             platformMapController.value = controller;
           },
         );
 
-    var search = options.searchBuilder(context, print, Icons.search);
-    var initialLocation = options.initialLocation ?? const LatLng(0, 0);
-    var initialZoom = options.zoom ?? defaultZoom;
+    var search = mapOptions.searchBuilder(context, print, Icons.search);
 
     var layers = [
-      ...options.additionalLayers,
+      ...mapOptions.additionalLayers,
     ];
 
     var mapControls = Wrap(
-      spacing: options.controlsSpacing,
+      spacing: mapOptions.controlsSpacing,
       direction: Axis.vertical,
       children: [
-        options.controlBuilder(
+        mapOptions.controlBuilder(
           context,
           Icons.pin_drop,
           () {},
         ),
-        options.controlBuilder(
+        mapOptions.controlBuilder(
           context,
           Icons.gps_fixed,
           () {},
         ),
-        options.controlBuilder(
+        mapOptions.controlBuilder(
           context,
           Icons.add,
           () => controller.value.move(
@@ -69,7 +90,7 @@ class LocationsMap extends HookWidget {
             controller.value.camera.zoom + 1,
           ),
         ),
-        options.controlBuilder(
+        mapOptions.controlBuilder(
           context,
           Icons.remove,
           () => controller.value.move(
@@ -99,12 +120,12 @@ class LocationsMap extends HookWidget {
         initialLocation,
         initialZoom,
       );
-      options.onMapReady?.call();
+      mapOptions.onMapReady?.call();
     }
 
     return Scaffold(
-      floatingActionButtonLocation: options.controlsPosition,
-      floatingActionButton: (options.showControls) ? mapControls : null,
+      floatingActionButtonLocation: mapOptions.controlsPosition,
+      floatingActionButton: (config.isCameraControlShown) ? mapControls : null,
       body: Stack(
         children: [
           Stack(
