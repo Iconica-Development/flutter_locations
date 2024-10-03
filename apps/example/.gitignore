@@ -49,3 +49,5 @@ web/
 ios/
 macos/
 linux/
+
+.metadata
