@@ -15,6 +15,10 @@ dependencies:
   dart_locations_repository_interface:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
     version: ^1.0.0
+  flutter_hooks: ^0.18.4
+  flutter_map: ^7.0.2
+  platform_maps_flutter: ^1.0.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
