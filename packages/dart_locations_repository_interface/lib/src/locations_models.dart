@@ -85,3 +85,71 @@ class Location {
     );
   }
 }
+
+/// A bounds made of geographical data.
+///
+/// Used to filter [LocationItem]s that exist within the given bounds.
+class LocationBounds {
+  /// Create new LocationBounds
+  LocationBounds({
+    required this.northWest,
+    required this.southEast,
+  }) : assert(
+          northWest.latitude > southEast.latitude,
+          "northWest should be north of southEast",
+        );
+
+  /// The upper left corner of the area
+  final Location northWest;
+
+  /// The lower right corner of the area
+  final Location southEast;
+
+  /// Check if the [location] is within these bounds.
+  ///
+  /// This handles the situation when the bounds crosses the antimeridian
+  bool contains(Location location) {
+    if (location.latitude > northWest.latitude ||
+        location.latitude < southEast.latitude) {
+      return false;
+    }
+
+    /// Handle antimeridian surpassing areas.
+    ///
+    if (northWest.longitude > southEast.longitude) {
+      return location.longitude <= southEast.longitude ||
+          location.longitude >= northWest.longitude;
+    }
+
+    return northWest.longitude <= location.longitude &&
+        location.longitude <= southEast.longitude;
+  }
+}
+
+/// Filter used to reduce the amount of results seen
+class LocationsFilter {
+  /// Create a filter to use in filtering Locations
+  const LocationsFilter({
+    this.bounds,
+  });
+
+  /// The bounds in which the locations should be found
+  final LocationBounds? bounds;
+
+  /// Filters items based on the given parameters
+  ///
+  /// Used for local filtering of items. It is better to have your repository
+  /// handle the filtering, idealy server side to reduce the amount of data
+  /// communicated.
+  List<T> filterItems<T extends LocationItem>(
+    List<T> items,
+  ) {
+    Iterable<T> toFilter = List.from(items);
+    if (bounds != null) {
+      toFilter =
+          toFilter.where((location) => bounds!.contains(location.location));
+    }
+
+    return toFilter.toList();
+  }
+}

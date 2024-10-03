@@ -78,7 +78,11 @@ class LocationsLocalRepository
   final StreamController<List<DefaultLocationItem>> _locationsStream =
       BehaviorSubject<List<DefaultLocationItem>>();
   @override
-  Stream<List<DefaultLocationItem>> getLocations() => _locationsStream.stream;
+  Stream<List<DefaultLocationItem>> getLocations({
+    LocationsFilter? filter,
+  }) =>
+      _locationsStream.stream
+          .map((locations) => filter?.filterItems(locations) ?? locations);
 
   @override
   Stream<DefaultLocationItem> getLocationForId(String locationId) =>
