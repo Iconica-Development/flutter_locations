@@ -4,7 +4,9 @@ import "package:dart_locations_repository_interface/dart_locations_repository_in
 /// types of datasources
 abstract interface class LocationsRepositoryInterface<T extends LocationItem> {
   /// Retrieves a list of locations
-  Stream<List<T>> getLocations();
+  Stream<List<T>> getLocations({
+    LocationsFilter? filter,
+  });
 
   /// Retrieves a single location
   Stream<T> getLocationForId(String locationId);

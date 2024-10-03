@@ -21,8 +21,12 @@ class LocationsService<T extends LocationItem> {
       _locationsRepositoryInterface is LocationsLocalRepository;
 
   /// Gets all locations through a stream
-  Stream<List<T>> getLocations() =>
-      _locationsRepositoryInterface.getLocations();
+  Stream<List<T>> getLocations({
+    LocationsFilter? filter,
+  }) =>
+      _locationsRepositoryInterface.getLocations(
+        filter: filter,
+      );
 
   /// Gets a specific location with [locationId] through a stream.
   ///
