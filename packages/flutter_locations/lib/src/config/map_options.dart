@@ -1,17 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map_controls.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map_search.dart";
-import "package:latlong2/latlong.dart";
 
 /// Class holding all the options for [LocationsUserStory]
 class LocationsMapOptions {
   /// [LocationsMapOptions] constructor
   const LocationsMapOptions({
     this.zoom,
-    this.initialLocation = const LatLng(0, 0),
     this.additionalLayers = const [],
     this.onMapReady,
-    this.showControls = true,
     this.controlBuilder = DefaultLocationsMapControl.builder,
     this.controlsSpacing = 4.0,
     this.searchBuilder = DefaultLocationsMapSearch.builder,
@@ -21,10 +18,8 @@ class LocationsMapOptions {
   ///
   const LocationsMapOptions.empty({
     this.additionalLayers = const [],
-    this.initialLocation = const LatLng(0, 0),
     this.zoom,
     this.onMapReady,
-    this.showControls = true,
     this.controlsPosition = FloatingActionButtonLocation.endFloat,
     this.controlsSpacing = 4.0,
     this.controlBuilder = DefaultLocationsMapControl.builder,
@@ -33,12 +28,6 @@ class LocationsMapOptions {
 
   /// The layers containing everything other than the actual tilelayer.
   final List<Widget> additionalLayers;
-
-  /// The location the map centers on initially.
-  final LatLng? initialLocation;
-
-  /// Should the zoom controls be shown or hidden.
-  final bool showControls;
 
   /// A callback which is triggered when the map has loaded.
   final VoidCallback? onMapReady;
