@@ -3,6 +3,60 @@ import "dart:async";
 import "package:dart_locations_repository_interface/dart_locations_repository_interface.dart";
 import "package:rxdart/subjects.dart";
 
+///
+final List<String> placeNames = [
+  "The Book Nook",
+  "Golden Grain Bakery",
+  "Van Dijk Fashion House",
+  "Toy Paradise",
+  "Fresh & Green Market",
+  "Step by Step Shoe Store",
+  "The Bike Shop",
+  "The Flower Studio",
+  "Sunlight Jewelry",
+  "Laptop Lounge",
+  "The Good Life Cheese Farm",
+  "The Cooking Corner",
+  "Brilliant Optics",
+  "The Bedroom Shop",
+  "Letterpress Books",
+  "The Home Haven",
+  "Little Joy Coffee Bar",
+  "The Butcher's Block",
+  "The Fishery",
+  "Healthy Living Pharmacy",
+  "Jewelry Heaven",
+  "Tech World",
+  "The Woodworker’s Den",
+  "The Surprise Gift Shop",
+  "The Kids' Room",
+  "Flash Photo Studio",
+  "Fast Pass Sports",
+  "The Wine Cellar",
+  "Green Bliss Garden Center",
+  "Denim Palace",
+  "The Paint Pot",
+  "Atmosphere & Style Home Decor",
+  "Old & Treasured Antiques",
+  "The Music Temple",
+  "The Hop Bell Brewery",
+  "Scented Treasures Perfume",
+  "Flavor Kingdom Cooking Studio",
+  "The Fabric Shop",
+  "The Playhouse",
+  "The Ice Cream Parlor",
+  "Art Room Gallery",
+  "The Cheese Master",
+  "The Beauty Studio",
+  "The Farmer’s Market",
+  "Pet Heaven Animal Dreams",
+  "The Bag Shop",
+  "The Treehouse Kids' Clothing",
+  "Night Watch Sleep Comfort",
+  "The Game Chest",
+  "The Travel Café",
+];
+
 /// Local in memory implementation of the locations repository.
 class LocationsLocalRepository
     implements LocationsRepositoryInterface<DefaultLocationItem> {
@@ -56,6 +110,7 @@ class LocationsLocalRepository
           DefaultLocationItem(
             location: location.normalizeLongitude(),
             locationId: "$index",
+            locationTitle: placeNames[index % placeNames.length],
           ),
         );
       }
