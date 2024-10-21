@@ -8,11 +8,11 @@ class LocationsLocalRepository
     implements LocationsRepositoryInterface<DefaultLocationItem> {
   /// Create a singleton locations repository containing locations in the
   /// netherlands
-  factory LocationsLocalRepository() =>
+  factory LocationsLocalRepository({int density = 50}) =>
       _instance ??= LocationsLocalRepository.forArea(
         northWest: const Location(latitude: 52.490028, longitude: 4.829669),
         southEast: const Location(latitude: 51.884544, longitude: 6.535011),
-        density: 50,
+        density: density,
       );
 
   /// Instantiates a local Locations repository with initial locations in a
