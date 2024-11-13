@@ -10,8 +10,25 @@ abstract interface class LocationItem {
   String get locationId;
 }
 
+///
+abstract mixin class LocationNameMixin {
+  /// Optional title bound to location
+  String? get locationTitle;
+}
+
+///
+abstract mixin class LocationDescriptionMixin {
+  /// Optional description bound to location
+  String? get locationDescription;
+}
+
+///
+abstract interface class TypedLocationItem
+    with LocationNameMixin, LocationDescriptionMixin
+    implements LocationItem {}
+
 /// A single entry for a location
-class DefaultLocationItem implements LocationItem {
+class DefaultLocationItem implements TypedLocationItem {
   /// Instantiates an item on a location
   ///
   /// The [locationId] and [location] are required to identify what and where.
@@ -33,10 +50,10 @@ class DefaultLocationItem implements LocationItem {
   /// Optional image bound to this location
   final String? locationImageUrl;
 
-  /// Optional title bound to this location
+  @override
   final String? locationTitle;
 
-  /// Optional description bound to this location
+  @override
   final String? locationDescription;
 }
 
@@ -131,10 +148,14 @@ class LocationsFilter {
   /// Create a filter to use in filtering Locations
   const LocationsFilter({
     this.bounds,
+    this.query,
   });
 
   /// The bounds in which the locations should be found
   final LocationBounds? bounds;
+
+  /// The string on which the location should be filtered.
+  final String? query;
 
   /// Filters items based on the given parameters
   ///
@@ -148,6 +169,28 @@ class LocationsFilter {
     if (bounds != null) {
       toFilter =
           toFilter.where((location) => bounds!.contains(location.location));
+    }
+
+    if (query != null) {
+      bool queryFilter(location) {
+        var queriedStrings = [
+          if (location is LocationNameMixin) location.locationTitle,
+          if (location is LocationDescriptionMixin)
+            location.locationDescription,
+        ];
+
+        return queriedStrings
+            .where(
+              (queryString) =>
+                  queryString != null &&
+                  queryString
+                      .toLowerCase()
+                      .contains(query!.trim().toLowerCase()),
+            )
+            .isNotEmpty;
+      }
+
+      toFilter = toFilter.where(queryFilter);
     }
 
     return toFilter.toList();

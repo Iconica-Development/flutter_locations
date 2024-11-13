@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_locations/src/config/locations_translations.dart";
-import "package:flutter_locations/src/config/map_options.dart";
+import "package:flutter_locations/flutter_locations.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/base_screen.dart";
 
 /// Class holding all the options for [LocationsUserStory].
@@ -10,7 +9,12 @@ class LocationsOptions {
     this.translations = const LocationsTranslations.empty(),
     this.builder = DefaultLocationsBaseScreen.builder,
     this.mapOptions = const LocationsMapOptions.empty(),
-  });
+    LocationsRepositoryInterface? respositoryInterface,
+  }) : respositoryInterface =
+            respositoryInterface ?? LocationsLocalRepository();
+
+  /// The implementation for communicating with the persistance layer
+  final LocationsRepositoryInterface respositoryInterface;
 
   /// The default translations used.
   final LocationsTranslations translations;
