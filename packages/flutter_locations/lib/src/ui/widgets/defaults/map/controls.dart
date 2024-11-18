@@ -74,10 +74,7 @@ class DefaultLocationsMapControls extends StatelessWidget {
   final MapController controller;
 
   /// The builder function.
-  static Widget builder(
-    BuildContext context,
-    MapController controller,
-  ) =>
+  static Widget builder(BuildContext context, MapController controller) =>
       DefaultLocationsMapControls(
         controller: controller,
       );

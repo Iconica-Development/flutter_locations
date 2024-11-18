@@ -9,23 +9,27 @@ import "package:platform_maps_flutter/platform_maps_flutter.dart"
 
 /// A map that can display locations.
 class LocationsMap extends HookWidget {
-  ///
+  /// [LocationsMap] constructor
   const LocationsMap({
-    this.controller,
+    required this.controller,
+    required this.locationStream,
+    required this.onSetBounds,
     super.key,
   });
 
-  ///
-  final MapController? controller;
+  /// [MapController] used for map movement.
+  final MapController controller;
 
-  ///
+  /// Variable [LocationItem] stream based on filter.
+  final Stream<List<LocationItem>> locationStream;
+
+  /// Callback used to set the bounds in the parent widget
+  final void Function(LatLngBounds) onSetBounds;
 
   @override
   Widget build(BuildContext context) {
-    var repository = LocationsScope.of(context).options.respositoryInterface;
     var options = LocationsScope.of(context).options.mapOptions;
     var defaultZoom = (options.initialLocation == null) ? 7.25 : 10.0;
-    var mapController = useState(controller ?? MapController());
     var platformMapController =
         useState<platform_maps.PlatformMapController?>(null);
     var markers = useState(<Marker>[]);
@@ -52,43 +56,16 @@ class LocationsMap extends HookWidget {
         LatLng(initialLocation.latitude, initialLocation.longitude);
     var initialZoom = options.zoom ?? defaultZoom;
 
-    var bounds = useState<LatLngBounds?>(null);
-    var query = useState("");
-
-    var search = options.searchBuilder(
-      context,
-      (value) => query.value = value,
-      Icons.search,
+    locationStream.listen(
+      (locationItems) => markers.value = locationItems
+          .map(
+            (e) => Marker(
+              point: LatLng(e.location.latitude, e.location.longitude),
+              child: options.markerBuilder(context, e),
+            ),
+          )
+          .toList(),
     );
-
-    repository
-        .getLocations(
-          filter: LocationsFilter(
-            bounds: bounds.value != null
-                ? LocationBounds(
-                    northWest: Location(
-                      latitude: bounds.value!.north,
-                      longitude: bounds.value!.west,
-                    ),
-                    southEast: Location(
-                      latitude: bounds.value!.south,
-                      longitude: bounds.value!.east,
-                    ),
-                  )
-                : null,
-            query: query.value.isNotEmpty ? query.value : null,
-          ),
-        )
-        .listen(
-          (locationItems) => markers.value = locationItems
-              .map(
-                (e) => Marker(
-                  point: LatLng(e.location.latitude, e.location.longitude),
-                  child: options.markerBuilder(context, e),
-                ),
-              )
-              .toList(),
-        );
 
     var layers = [
       MarkerLayer(markers: markers.value),
@@ -108,44 +85,32 @@ class LocationsMap extends HookWidget {
           ),
         ),
       );
-      bounds.value = position.visibleBounds;
+      onSetBounds(position.visibleBounds);
     }
 
     void initializeMaps() {
-      mapController.value.move(
+      controller.move(
         initialLatLng,
         initialZoom,
       );
       options.onMapReady?.call();
     }
 
-    return Scaffold(
-      floatingActionButtonLocation: options.controlsOptions.controlsPosition,
-      floatingActionButton: (options.controlsOptions.showControls)
-          ? options.controlsOptions
-              .controlsBuilder(context, mapController.value)
-          : null,
-      body: Stack(
-        children: [
-          Stack(
-            children: [
-              buildPlatformSpecificMap(),
-              FlutterMap(
-                mapController: mapController.value,
-                options: MapOptions(
-                  onPositionChanged: alignMaps,
-                  backgroundColor: Colors.transparent,
-                  initialCenter: initialLatLng,
-                  initialZoom: initialZoom,
-                  onMapReady: initializeMaps,
-                ),
-                children: layers,
-              ),
-              search,
-            ],
+    return Stack(
+      children: [
+        buildPlatformSpecificMap(),
+        FlutterMap(
+          mapController: controller,
+          options: MapOptions(
+            onPositionChanged: alignMaps,
+            backgroundColor: Colors.transparent,
+            initialCenter: initialLatLng,
+            initialZoom: initialZoom,
+            onMapReady: initializeMaps,
           ),
-        ],
-      ),
+          children: layers,
+        ),
+      ],
     );
   }
 }

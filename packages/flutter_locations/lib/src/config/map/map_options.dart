@@ -1,6 +1,6 @@
 import "package:dart_locations_repository_interface/dart_locations_repository_interface.dart";
 import "package:flutter/material.dart";
-import "package:flutter_locations/src/config/controls_options.dart";
+import "package:flutter_locations/src/config/map/controls_options.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map/marker.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map/search.dart";
 
