@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_locations/flutter_locations.dart";
+import "package:flutter_locations/src/config/list/list_options.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/base_screen.dart";
 
 /// Class holding all the options for [LocationsUserStory].
@@ -9,6 +10,7 @@ class LocationsOptions {
     this.translations = const LocationsTranslations.empty(),
     this.builder = DefaultLocationsBaseScreen.builder,
     this.mapOptions = const LocationsMapOptions.empty(),
+    this.listOptions = const LocationsListOptions.empty(),
     LocationsRepositoryInterface? respositoryInterface,
   }) : respositoryInterface =
             respositoryInterface ?? LocationsLocalRepository();
@@ -24,6 +26,9 @@ class LocationsOptions {
 
   /// The map options.
   final LocationsMapOptions mapOptions;
+
+  /// The list options.
+  final LocationsListOptions listOptions;
 }
 
 ///

@@ -112,13 +112,13 @@ class MapControl {
   final IconData? icon;
 }
 
-///
+/// The interface for building a control collection
 typedef LocationMapControlsBuilder = Widget Function(
   BuildContext context,
   MapController controller,
 );
 
-///
+/// The interface for building a map control
 typedef LocationMapControlBuilder = Widget Function(
   BuildContext context,
   IconData icon,
