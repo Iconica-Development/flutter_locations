@@ -8,6 +8,14 @@ import "package:flutter_locations/src/ui/widgets/search.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
 
+T? _nullOn<E extends Exception, T>(T Function() callback) {
+  try {
+    return callback();
+  } on E {
+    return null;
+  }
+}
+
 /// A map that can display locations.
 class LocationsHome extends HookWidget {
   /// [LocationsHome] constructor
@@ -32,6 +40,13 @@ class LocationsHome extends HookWidget {
     void setBounds(LatLngBounds newBounds) => bounds.value = newBounds;
     void setQuery(String value) => query.value = value;
 
+    // We have to try catch on a plain Exception because
+    // This is what the camera.zoom will throw if
+    // you fetch it before the first render cycle :(
+    var zoom = _nullOn<Exception, double>(
+      () => mapController.value.camera.zoom,
+    );
+
     var locationStream = repository.getLocations(
       filter: LocationsFilter(
         bounds: bounds.value != null
@@ -47,6 +62,7 @@ class LocationsHome extends HookWidget {
               )
             : null,
         query: query.value.isNotEmpty ? query.value : null,
+        zoom: zoom,
       ),
     );
 

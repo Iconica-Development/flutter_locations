@@ -37,9 +37,7 @@ class DefaultLocationsListItem<T extends LocationItem> extends StatelessWidget {
             children: [
               const ColoredBox(
                 color: Colors.grey,
-                child: SizedBox(
-                  height: 132.0,
-                ),
+                child: SizedBox(height: 132.0),
               ),
               Container(
                 padding: const EdgeInsets.all(12.0).copyWith(top: 8.0),

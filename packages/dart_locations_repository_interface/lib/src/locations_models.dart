@@ -10,21 +10,27 @@ abstract interface class LocationItem {
   String get locationId;
 }
 
-///
+/// LocationName Mixin
 abstract mixin class LocationNameMixin {
   /// Optional title bound to location
   String? get locationTitle;
 }
 
-///
+/// LocationDescription Mixin
 abstract mixin class LocationDescriptionMixin {
   /// Optional description bound to location
   String? get locationDescription;
 }
 
+/// LocationZoom
+abstract mixin class LocationZoomMixin {
+  /// The minimal amount of zoom required to see this location.
+  double? get minZoomLevel;
+}
+
 ///
 abstract interface class TypedLocationItem
-    with LocationNameMixin, LocationDescriptionMixin
+    with LocationNameMixin, LocationDescriptionMixin, LocationZoomMixin
     implements LocationItem {}
 
 /// A single entry for a location
@@ -40,10 +46,12 @@ class DefaultLocationItem implements TypedLocationItem {
     this.locationImageUrl,
     this.locationDescription,
     this.locationTitle,
+    this.minZoomLevel,
   });
 
   @override
   final Location location;
+
   @override
   final String locationId;
 
@@ -55,6 +63,9 @@ class DefaultLocationItem implements TypedLocationItem {
 
   @override
   final String? locationDescription;
+
+  @override
+  final double? minZoomLevel;
 }
 
 /// This defines the information needed to know where a physical location can
@@ -149,13 +160,17 @@ class LocationsFilter {
   const LocationsFilter({
     this.bounds,
     this.query,
+    this.zoom,
   });
 
-  /// The bounds in which the locations should be found
+  /// The bounds within which the locations should be found
   final LocationBounds? bounds;
 
   /// The string on which the location should be filtered.
   final String? query;
+
+  /// The zoom on which the locations should be filtered.
+  final double? zoom;
 
   /// Filters items based on the given parameters
   ///
@@ -191,6 +206,15 @@ class LocationsFilter {
       }
 
       toFilter = toFilter.where(queryFilter);
+    }
+
+    if (zoom != null) {
+      bool zoomFilter(location) {
+        if (location is! LocationZoomMixin) return true;
+        return zoom! >= (location.minZoomLevel ?? 0);
+      }
+
+      toFilter = toFilter.where(zoomFilter);
     }
 
     return toFilter.toList();
