@@ -22,26 +22,29 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: DevicePreview.appBuilder,
-      locale: DevicePreview.locale(context),
-      supportedLocales: const [
-        Locale("en", "US"),
-        Locale("nl", "NL"),
-      ],
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      home: LocationsUserStory(
-        options: LocationsOptions(
-          respositoryInterface: LocationsLocalRepository(density: 7),
-          mapOptions: const LocationsMapOptions(
-            zoom: 7,
-            initialLocation: Location(
-              latitude: 52.2056435,
-              longitude: 5.2,
+        builder: DevicePreview.appBuilder,
+        locale: DevicePreview.locale(context),
+        supportedLocales: const [
+          Locale("en", "US"),
+          Locale("nl", "NL"),
+        ],
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        home: LocationsUserStory(
+          options: LocationsOptions(
+            respositoryInterface: LocationsLocalRepository(density: 7),
+            mapOptions: const LocationsMapOptions(
+              zoom: 7,
+              initialLocation: Location(
+                latitude: 52.2056435,
+                longitude: 5.2,
+              ),
+            ),
+            mapConfiguration: const PlatformMapConfiguration(
+              initialCameraPosition: LatLng(52.2056435, 5.2),
+              isCameraControlShown: true,
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
