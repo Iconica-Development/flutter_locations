@@ -129,6 +129,11 @@ class LocationsMap extends HookWidget {
             initialCenter: initialLatLng,
             initialZoom: initialZoom,
             onMapReady: initializeMaps,
+            interactionOptions: const InteractionOptions(
+              enableMultiFingerGestureRace: true,
+              flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              pinchMoveThreshold: 20.0,
+            ),
           ),
           children: layers,
         ),
