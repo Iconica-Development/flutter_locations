@@ -1,6 +1,12 @@
-# example
+# Flutter location example
 
-A new Flutter project.
+This app demonstrates the flutter locations userstory.
+
+You can create the app by running the following command:
+
+```bash
+flutter create .
+```
 
 ## Getting Started
 
