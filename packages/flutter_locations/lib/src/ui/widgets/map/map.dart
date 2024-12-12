@@ -69,6 +69,11 @@ class LocationsMap extends HookWidget {
     );
 
     var layers = [
+      if (options.enableOpenMapsTileLayer) ...[
+        TileLayer(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ),
+      ],
       MarkerClusterLayerWidget(
         options: MarkerClusterLayerOptions(
           markers: markers.value,
@@ -120,7 +125,9 @@ class LocationsMap extends HookWidget {
 
     return Stack(
       children: [
-        buildPlatformSpecificMap(),
+        if (!options.enableOpenMapsTileLayer) ...[
+          buildPlatformSpecificMap(),
+        ],
         FlutterMap(
           mapController: controller,
           options: MapOptions(
