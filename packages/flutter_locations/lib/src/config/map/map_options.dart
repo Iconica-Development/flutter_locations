@@ -15,6 +15,7 @@ class LocationsMapOptions {
     this.searchBuilder = DefaultLocationsMapSearch.builder,
     this.markerBuilder = DefaultLocationsMapMarker.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
+    this.enableOpenMapsTileLayer = false,
   });
 
   ///
@@ -26,6 +27,7 @@ class LocationsMapOptions {
     this.searchBuilder = DefaultLocationsMapSearch.builder,
     this.markerBuilder = DefaultLocationsMapMarker.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
+    this.enableOpenMapsTileLayer = false,
   });
 
   /// The layers containing everything other than the actual tilelayer.
@@ -48,6 +50,10 @@ class LocationsMapOptions {
 
   ///
   final LocationsMapControlsOptions controlsOptions;
+
+  /// Enables the open maps tile layer from flutter_map that uses openstreetmap.
+  /// If this is set to true, the platform maps will be disabled.
+  final bool enableOpenMapsTileLayer;
 }
 
 ///

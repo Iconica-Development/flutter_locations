@@ -8,15 +8,28 @@ You can create the app by running the following command:
 flutter create .
 ```
 
-## Getting Started
+In the LocationMapOptions class you can enable/disable the google maps implementation that is displayed in the app.
+In this example it is set to true so that open maps is used instead of google maps because it does not require an API key.
+So before setting it to false you need to provide a google maps API key in the AndroidManifest.xml file. For apple it will automatically switch to apple maps.
 
-This project is a starting point for a Flutter application.
+```dart
+LocationMapOptions(
+    enableOpenMapsTileLayer: true,
+)
+```
 
-A few resources to get you started if this is your first Flutter project:
+The following permissions are required in the AndroidManifest.xml file:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For macos you need to add the following entitlements to the macos/Runner/DebugProfile.entitlements and macos/Runner/Release.entitlements files:
+
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+See [Flutter maps documentation](https://docs.fleaflet.dev/getting-started/installation) for more information.
+

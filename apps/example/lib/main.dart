@@ -38,6 +38,8 @@ class App extends StatelessWidget {
                 latitude: 52.2056435,
                 longitude: 5.2,
               ),
+              // Openmaps works without an API key
+              enableOpenMapsTileLayer: true,
             ),
           ),
         ),
