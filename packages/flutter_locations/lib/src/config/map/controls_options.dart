@@ -1,3 +1,4 @@
+import "package:dart_locations_repository_interface/dart_locations_repository_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map/controls.dart";
 import "package:flutter_map/flutter_map.dart";
@@ -72,19 +73,20 @@ class MapControl {
   /// Pin drop [MapControl]
   factory MapControl.pinDrop() => MapControl(
         icon: Icons.pin_drop,
-        onPressed: (controller) => controller.rotate(0),
+        onPressed: (controller, repository) async =>
+            repository.toggleCurrentLocationMarker(),
       );
 
   /// Gps [MapControl]
   factory MapControl.gps() => MapControl(
         icon: Icons.gps_fixed,
-        onPressed: (_) {},
+        onPressed: (_, __) {},
       );
 
   /// Zoom in [MapControl]
   factory MapControl.zoomIn() => MapControl(
         icon: Icons.add,
-        onPressed: (controller) => controller.move(
+        onPressed: (controller, __) => controller.move(
           controller.camera.center,
           controller.camera.zoom + 1,
         ),
@@ -93,14 +95,17 @@ class MapControl {
   /// Zoom out [MapControl]
   factory MapControl.zoomOut() => MapControl(
         icon: Icons.remove,
-        onPressed: (controller) => controller.move(
+        onPressed: (controller, __) => controller.move(
           controller.camera.center,
           controller.camera.zoom - 1,
         ),
       );
 
   ///
-  final void Function(MapController controller) onPressed;
+  final void Function(
+    MapController controller,
+    LocationsRepositoryInterface repository,
+  ) onPressed;
 
   ///
   final MapController? controller;
@@ -113,9 +118,12 @@ class MapControl {
 }
 
 /// The interface for building a control collection
+/// [repository] is the location repository and is used for some of the controls
+/// to interact with the map through the repository.
 typedef LocationMapControlsBuilder = Widget Function(
   BuildContext context,
   MapController controller,
+  LocationsRepositoryInterface repository,
 );
 
 /// The interface for building a map control

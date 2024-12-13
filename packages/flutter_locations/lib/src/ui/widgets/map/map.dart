@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
+import "package:flutter_locations/src/ui/widgets/map/location_marker.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
@@ -74,6 +75,7 @@ class LocationsMap extends HookWidget {
           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         ),
       ],
+      const CurrentLocationMarker(),
       MarkerClusterLayerWidget(
         options: MarkerClusterLayerOptions(
           markers: markers.value,

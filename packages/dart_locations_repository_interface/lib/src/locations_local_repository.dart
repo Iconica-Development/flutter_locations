@@ -343,8 +343,14 @@ class LocationsLocalRepository
 
   final List<DefaultLocationItem> _items;
 
+  /// The state of whether the current location marker should be enabled.
+  bool enableCurrentLocationMarker = true;
+
   final StreamController<List<DefaultLocationItem>> _locationsStream =
       BehaviorSubject<List<DefaultLocationItem>>();
+
+  final StreamController<bool> _currentLocationMarkerStream =
+      BehaviorSubject<bool>.seeded(true);
   @override
   Stream<List<DefaultLocationItem>> getLocations({
     LocationsFilter? filter,
@@ -362,4 +368,14 @@ class LocationsLocalRepository
           },
         ),
       );
+
+  @override
+  Stream<bool> isCurrentLocationMarkerEnabled() =>
+      _currentLocationMarkerStream.stream;
+
+  @override
+  Future<void> toggleCurrentLocationMarker() async {
+    enableCurrentLocationMarker = !enableCurrentLocationMarker;
+    _currentLocationMarkerStream.add(enableCurrentLocationMarker);
+  }
 }
