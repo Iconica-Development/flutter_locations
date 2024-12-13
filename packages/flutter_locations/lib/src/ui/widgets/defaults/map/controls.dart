@@ -1,3 +1,4 @@
+import "package:dart_locations_repository_interface/dart_locations_repository_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
@@ -67,16 +68,26 @@ class DefaultLocationsMapControls extends StatelessWidget {
   /// Contructor receiving the map controller.
   const DefaultLocationsMapControls({
     required this.controller,
+    required this.repository,
     super.key,
   });
 
   /// A [MapController] that allows the controls to communicate with the map.
   final MapController controller;
 
+  /// a [LocationsRepositoryInterface] that allows the controls to communicate
+  /// with the repository.
+  final LocationsRepositoryInterface repository;
+
   /// The builder function.
-  static Widget builder(BuildContext context, MapController controller) =>
+  static Widget builder(
+    BuildContext context,
+    MapController controller,
+    LocationsRepositoryInterface repository,
+  ) =>
       DefaultLocationsMapControls(
         controller: controller,
+        repository: repository,
       );
 
   @override
@@ -92,7 +103,7 @@ class DefaultLocationsMapControls extends StatelessWidget {
               options.controlBuilder(
                 context,
                 control.icon!,
-                () => control.onPressed(controller),
+                () => control.onPressed(controller, repository),
               ),
         ],
       ],

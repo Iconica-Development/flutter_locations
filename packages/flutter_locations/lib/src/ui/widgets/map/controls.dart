@@ -15,9 +15,15 @@ class LocationsMapControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options = LocationsScope.of(context).options.mapOptions.controlsOptions;
-    return (options.showControls)
-        ? options.controlsBuilder(context, mapController)
+    var options = LocationsScope.of(context).options;
+    var controlOptions = options.mapOptions.controlsOptions;
+    var repository = options.respositoryInterface;
+    return controlOptions.showControls
+        ? controlOptions.controlsBuilder(
+            context,
+            mapController,
+            repository,
+          )
         : const SizedBox.shrink();
   }
 }

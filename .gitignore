@@ -8,5 +8,7 @@
 packages/**/pubspec.lock
 
 pubspec_overrides.yaml
-
+/pubspec.lock
+melos_flutter_locations.iml
 build/
+.metadata
