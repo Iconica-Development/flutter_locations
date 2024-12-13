@@ -4,7 +4,7 @@ import "package:dart_locations_repository_interface/dart_locations_repository_in
 /// within the context of a geographical area.
 class LocationsService<T extends LocationItem> {
   /// Constructs a service
-  LocationsService({
+  const LocationsService({
     required LocationsRepositoryInterface<T> locationsRepositoryInterface,
   }) : _locationsRepositoryInterface = locationsRepositoryInterface;
 
@@ -33,4 +33,13 @@ class LocationsService<T extends LocationItem> {
   /// Throws a [LocationForIdDoesNotExistException] if no location was found
   Stream<T> getLocationForId(String locationId) =>
       _locationsRepositoryInterface.getLocationForId(locationId);
+
+  /// Stream that emits a boolean value indicating if the current location
+  /// marker is enabled
+  Stream<bool> isCurrentLocationMarkerEnabled() =>
+      _locationsRepositoryInterface.isCurrentLocationMarkerEnabled();
+
+  /// Toggles the current location marker
+  Future<void> toggleCurrentLocationMarker() =>
+      _locationsRepositoryInterface.toggleCurrentLocationMarker();
 }
