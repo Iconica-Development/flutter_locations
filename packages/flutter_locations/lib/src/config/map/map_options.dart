@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_locations/src/config/map/controls_options.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map/marker.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/map/search.dart";
+import "package:flutter_map/flutter_map.dart";
 
 /// Class holding all the options for [LocationsUserStory]
 class LocationsMapOptions {
@@ -16,6 +17,7 @@ class LocationsMapOptions {
     this.markerBuilder = DefaultLocationsMapMarker.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
     this.enableOpenMapsTileLayer = false,
+    this.tileProvider,
   });
 
   ///
@@ -28,6 +30,7 @@ class LocationsMapOptions {
     this.markerBuilder = DefaultLocationsMapMarker.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
     this.enableOpenMapsTileLayer = false,
+    this.tileProvider,
   });
 
   /// The layers containing everything other than the actual tilelayer.
@@ -54,6 +57,11 @@ class LocationsMapOptions {
   /// Enables the open maps tile layer from flutter_map that uses openstreetmap.
   /// If this is set to true, the platform maps will be disabled.
   final bool enableOpenMapsTileLayer;
+
+  /// [TileProvider] used of the openmaps tile layer. This can be used to add
+  /// CancellableNetworkTileProvider or other tile providers to improve
+  /// performance without creating a dependency in flutter_locations.
+  final TileProvider? tileProvider;
 }
 
 ///

@@ -1,6 +1,7 @@
 import "package:device_preview/device_preview.dart";
 import "package:flutter/material.dart";
 import "package:flutter_locations/flutter_locations.dart";
+import "package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart";
 
 void main() {
   runApp(
@@ -32,14 +33,15 @@ class App extends StatelessWidget {
         home: LocationsUserStory(
           options: LocationsOptions(
             respositoryInterface: LocationsLocalRepository(density: 7),
-            mapOptions: const LocationsMapOptions(
+            mapOptions: LocationsMapOptions(
               zoom: 7,
-              initialLocation: Location(
+              initialLocation: const Location(
                 latitude: 52.2056435,
                 longitude: 5.2,
               ),
               // Openmaps works without an API key
               enableOpenMapsTileLayer: true,
+              tileProvider: CancellableNetworkTileProvider(),
             ),
           ),
         ),
