@@ -23,7 +23,7 @@ class DefaultLocationsMapMarker extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.surfaceTint,
           ),
           height: 10,
           width: 10,

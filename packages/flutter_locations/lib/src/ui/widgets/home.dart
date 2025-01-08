@@ -69,6 +69,7 @@ class LocationsHome extends HookWidget {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
           floatingActionButtonLocation:
               options.controlsOptions.controlsPosition,
           floatingActionButton:

@@ -28,6 +28,8 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
     var options =
         LocationsScope.of(context).options.listOptions.listItemOptions;
 
+    var minimumHeight=100.0;
+
     var locations = useState(<Widget>[]);
 
     locationStream.listen(
@@ -38,7 +40,8 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
           .toList(),
     );
 
-    var height = useState(200.0);
+    var screenHeight = MediaQuery.sizeOf(context).height;
+    var height = useState(minimumHeight);
     var toggle = useState(false);
     var interaction = useState(false);
 
@@ -49,9 +52,41 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
             topRight: Radius.circular(20.0),
           );
 
-    var planeColor = const Color(0xFFFFFFFF);
-    var borderColor = const Color(0xFF9E9E9E);
-    var handleBarColor = toggle.value ? Colors.transparent : borderColor;
+    void verticalDragUpdate(DragUpdateDetails details) {
+      interaction.value = true;
+      var screenHeight = MediaQuery.sizeOf(context).height;
+      height.value = (screenHeight - details.globalPosition.dy).clamp(
+        10,
+        screenHeight,
+      );
+    }
+
+    void verticalDragEnd(DragEndDetails details) {
+      var highDownwardVelocity = details.velocity.pixelsPerSecond.dy > 2000;
+      var highUpwardVelocity = details.velocity.pixelsPerSecond.dy < -2000;
+      var pastHalfway = details.globalPosition.dy > screenHeight / 2;
+
+      toggle.value = toggle.value
+          ? !(highDownwardVelocity || pastHalfway)
+          : (highUpwardVelocity || !pastHalfway);
+
+      height.value = (toggle.value) ? screenHeight : minimumHeight;
+      interaction.value = false;
+    }
+
+    var transformationTween =
+        Tween(begin: 0.0, end: 1.0).transform(height.value / screenHeight);
+
+    var extraPaddingTween =
+        Tween(begin: 20.0, end: 80.0).transform(transformationTween);
+
+    var durationValue = interaction.value ? Duration.zero : Durations.short2;
+
+    var planeColor = theme.colorScheme.surface;
+    var borderColor = theme.colorScheme.surfaceContainerHighest
+        .withAlpha((255 * (1.0 - transformationTween)).toInt());
+    var handleBarColor = borderColor;
+
     var borderSide = BorderSide(
       width: 1.0,
       color: borderColor,
@@ -62,8 +97,7 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: interaction.value ? Duration.zero : Durations.short2,
-            curve: Curves.easeInOut,
+            duration: durationValue,
             height: height.value,
             decoration: BoxDecoration(
               border: Border(
@@ -71,45 +105,24 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
                 left: borderSide,
                 right: borderSide,
               ),
-              borderRadius: borderRadius,
+              borderRadius: borderRadius * (1.0 - transformationTween),
               color: planeColor,
             ),
             child: Stack(
               children: [
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onVerticalDragUpdate: (details) {
-                    interaction.value = true;
-                    var screenHeight = MediaQuery.sizeOf(context).height;
-                    height.value = (screenHeight - details.globalPosition.dy)
-                        .clamp(10, screenHeight);
-                  },
-                  onVerticalDragEnd: (details) {
-                    var screenHeight = MediaQuery.sizeOf(context).height;
-
-                    var highDownwardVelocity =
-                        details.velocity.pixelsPerSecond.dy > 2000;
-                    var highUpwardVelocity =
-                        details.velocity.pixelsPerSecond.dy < -2000;
-
-                    var pastHalfway =
-                        details.globalPosition.dy > screenHeight / 2;
-
-                    toggle.value = toggle.value
-                        ? !(highDownwardVelocity || pastHalfway)
-                        : (highUpwardVelocity || !pastHalfway);
-
-                    height.value = (toggle.value) ? screenHeight : 100;
-                    interaction.value = false;
-                  },
+                  onVerticalDragUpdate: verticalDragUpdate,
+                  onVerticalDragEnd: verticalDragEnd,
                   child: SizedBox(
                     height: 20,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 54.0,
+                        child: AnimatedContainer(
+                          duration: durationValue,
                           height: 4.0,
+                          width: 54.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
                             color: handleBarColor,

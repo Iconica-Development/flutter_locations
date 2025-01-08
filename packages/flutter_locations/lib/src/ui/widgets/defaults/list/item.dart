@@ -21,13 +21,17 @@ class DefaultLocationsListItem<T extends LocationItem> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     var location = this.location as TypedLocationItem;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(width: 1),
+          border: Border.all(
+            width: 1,
+            color: theme.colorScheme.surfaceContainerHighest,
+          ),
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: ClipRRect(
@@ -35,9 +39,9 @@ class DefaultLocationsListItem<T extends LocationItem> extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const ColoredBox(
-                color: Colors.grey,
-                child: SizedBox(height: 132.0),
+              ColoredBox(
+                color: theme.colorScheme.surfaceContainerHighest,
+                child: const SizedBox(height: 132.0),
               ),
               Container(
                 padding: const EdgeInsets.all(12.0).copyWith(top: 8.0),
