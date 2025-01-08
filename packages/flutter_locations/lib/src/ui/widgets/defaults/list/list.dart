@@ -25,17 +25,18 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options =
-        LocationsScope.of(context).options.listOptions.listItemOptions;
+    var theme = Theme.of(context);
+    var listOptions = LocationsScope.of(context).options.listOptions;
+    var listItemOptions = listOptions.listItemOptions;
 
-    var minimumHeight=100.0;
+    var minimumHeight = listOptions.minimumHeight;
 
     var locations = useState(<Widget>[]);
 
     locationStream.listen(
       (locationItems) => locations.value = locationItems
           .map(
-            (e) => options.listBuilder(context, e),
+            (e) => listItemOptions.listBuilder(context, e),
           )
           .toList(),
     );
@@ -97,6 +98,7 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
       child: Stack(
         children: [
           AnimatedContainer(
+            curve: Curves.easeInOut,
             duration: durationValue,
             height: height.value,
             decoration: BoxDecoration(
@@ -134,7 +136,7 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
                 ),
                 Padding(
                   // TODO(Quirille): Values should be determined from search builder / options
-                  padding: EdgeInsets.only(top: toggle.value ? 80.0 : 20.0),
+                  padding: EdgeInsets.only(top: extraPaddingTween),
                   child: ListView(
                     physics: toggle.value
                         ? null
