@@ -12,6 +12,7 @@ dependencies:
   flutter_locations:
     hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
     version: ^1.0.0
+  flutter_map_cancellable_tile_provider: ^3.0.2
 
 dev_dependencies:
   flutter_test:

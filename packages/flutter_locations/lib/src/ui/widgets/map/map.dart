@@ -73,6 +73,7 @@ class LocationsMap extends HookWidget {
       if (options.enableOpenMapsTileLayer) ...[
         TileLayer(
           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          tileProvider: options.tileProvider,
         ),
       ],
       MarkerClusterLayerWidget(

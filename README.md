@@ -27,7 +27,15 @@ So before setting it to false you need to provide a google maps API key in the A
 ```dart
 LocationMapOptions(
     enableOpenMapsTileLayer: true,
+    tileProvider: CancellableNetworkTileProvider(),
 )
+```
+
+When using the openmaps tilelayer from the flutter_maps package it is recommended to use the [CancellableNetworkTileProvider](https://pub.dev/packages/flutter_map_cancellable_tile_provider) especially on Web where performance is drastically improved. Because flutter_locations shouldn't depend on flutter_map_cancellable_tile_provider it is not included in the dependencies. You can add it to your pubspec.yaml file like this:
+
+```yaml
+dependencies:
+  flutter_map_cancellable_tile_provider: ^latest_version
 ```
 
 For the features of this userstory permissions are required for each platform.
