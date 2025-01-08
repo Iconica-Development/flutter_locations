@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
 
 /// The default Control widget.
-class DefaultLocationsMapControl extends StatefulWidget {
+class DefaultLocationsMapControl extends HookWidget {
   /// Constructor receiving an onTap callback and icon.
   const DefaultLocationsMapControl({
     required this.onTap,
@@ -29,37 +30,36 @@ class DefaultLocationsMapControl extends StatefulWidget {
       );
 
   @override
-  State<DefaultLocationsMapControl> createState() =>
-      _DefaultLocationsMapControlState();
-}
+  Widget build(BuildContext context) {
+    var isHovered = useState(false);
 
-class _DefaultLocationsMapControlState
-    extends State<DefaultLocationsMapControl> {
-  bool _isHovered = false;
-  @override
-  Widget build(BuildContext context) => MouseRegion(
-        onHover: (value) => setState(() => _isHovered = true),
-        onExit: (event) => setState(() => _isHovered = false),
-        child: SizedBox(
-          height: 36.0,
-          width: 36.0,
-          child: FloatingActionButton(
-            heroTag: UniqueKey(),
-            onPressed: widget.onTap,
-            hoverColor: Colors.white,
-            backgroundColor: Colors.white,
-            mini: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: Icon(
-              widget.icon,
-              color: _isHovered ? Colors.black : Colors.grey,
-              size: 24.0,
-            ),
+    var theme = Theme.of(context);
+    return MouseRegion(
+      onHover: (value) => isHovered.value = true,
+      onExit: (event) => isHovered.value = false,
+      child: SizedBox(
+        height: 36.0,
+        width: 36.0,
+        child: FloatingActionButton(
+          heroTag: UniqueKey(),
+          onPressed: onTap,
+          hoverColor: theme.colorScheme.surface,
+          backgroundColor: theme.colorScheme.surface,
+          mini: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: Icon(
+            icon,
+            color: isHovered.value
+                ? theme.colorScheme.onSurface
+                : theme.colorScheme.onSurfaceVariant,
+            size: 24.0,
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 /// The default controls wrapper.

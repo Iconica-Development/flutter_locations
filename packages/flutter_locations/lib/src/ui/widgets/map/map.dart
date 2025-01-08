@@ -80,7 +80,7 @@ class LocationsMap extends HookWidget {
           builder: (context, markers) => DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.surfaceTint,
             ),
             child: Center(
               child: Text(

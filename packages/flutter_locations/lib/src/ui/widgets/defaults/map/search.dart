@@ -42,7 +42,7 @@ class DefaultLocationsMapSearch extends HookWidget {
           onSubmitted: onSubmit,
           decoration: InputDecoration(
             hintText: translations.searchInputPlaceholder,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).colorScheme.surface,
             filled: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(40.0),
