@@ -9,16 +9,21 @@ class LocationsListOptions {
   const LocationsListOptions({
     this.listBuilder = DefaultLocationsList.builder,
     this.listItemOptions = const LocationsListItemOptions.empty(),
+    this.minimumHeight = 0,
   });
 
   ///
   const LocationsListOptions.empty({
     this.listBuilder = DefaultLocationsList.builder,
     this.listItemOptions = const LocationsListItemOptions.empty(),
+    this.minimumHeight = 100.0,
   });
 
   /// The builder function for the list.
   final LocationsListBuilder listBuilder;
+
+  /// The minimum height used when the panel is shut.
+  final double minimumHeight;
 
   /// The options for the list items
   final LocationsListItemOptions listItemOptions;

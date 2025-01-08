@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
@@ -30,7 +32,8 @@ class LocationsHome extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var repository = LocationsScope.of(context).options.respositoryInterface;
-    var options = LocationsScope.of(context).options.mapOptions;
+    var mapOptions = LocationsScope.of(context).options.mapOptions;
+    var listOptions = LocationsScope.of(context).options.listOptions;
 
     var bounds = useState<LatLngBounds?>(null);
     var query = useState("");
@@ -66,14 +69,23 @@ class LocationsHome extends HookWidget {
       ),
     );
 
+    var bottomPadding = max(
+      0.0,
+      listOptions.minimumHeight - MediaQuery.viewPaddingOf(context).bottom,
+    );
+
     return Stack(
       children: [
         Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
           floatingActionButtonLocation:
-              options.controlsOptions.controlsPosition,
-          floatingActionButton:
-              LocationsMapControls(mapController: mapController.value),
+              mapOptions.controlsOptions.controlsPosition,
+          floatingActionButton: LocationsMapControls(
+            mapController: mapController.value,
+            extraSafeArea: EdgeInsets.only(
+              bottom: bottomPadding,
+            ),
+          ),
           body: Stack(
             children: [
               LocationsMap(
