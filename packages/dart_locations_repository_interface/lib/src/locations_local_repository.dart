@@ -343,8 +343,19 @@ class LocationsLocalRepository
 
   final List<DefaultLocationItem> _items;
 
+  /// The state of whether the current location marker should be enabled.
+  bool enableCurrentLocationMarker = true;
+
+  bool _isGpsFollowActive = true;
+
   final StreamController<List<DefaultLocationItem>> _locationsStream =
       BehaviorSubject<List<DefaultLocationItem>>();
+
+  final StreamController<bool> _currentLocationMarkerStream =
+      BehaviorSubject<bool>.seeded(true);
+
+  final StreamController<bool> _gpsFollowStream =
+      BehaviorSubject<bool>.seeded(true);
   @override
   Stream<List<DefaultLocationItem>> getLocations({
     LocationsFilter? filter,
@@ -362,4 +373,39 @@ class LocationsLocalRepository
           },
         ),
       );
+
+  @override
+  Stream<bool> isCurrentLocationMarkerEnabled() =>
+      _currentLocationMarkerStream.stream;
+
+  @override
+  Future<void> toggleCurrentLocationMarker() async {
+    enableCurrentLocationMarker = !enableCurrentLocationMarker;
+    _currentLocationMarkerStream.add(enableCurrentLocationMarker);
+  }
+
+  @override
+  Future<void> setCurrentLocationMarkerActive() async {
+    if (!enableCurrentLocationMarker) {
+      enableCurrentLocationMarker = true;
+      _currentLocationMarkerStream.add(enableCurrentLocationMarker);
+    }
+  }
+
+  @override
+  Stream<bool> isGpsFollowActive() => _gpsFollowStream.stream;
+
+  @override
+  Future<void> toggleGpsFollow() async {
+    _isGpsFollowActive = !_isGpsFollowActive;
+    _gpsFollowStream.add(_isGpsFollowActive);
+  }
+
+  @override
+  Future<void> setGpsFollowInactive() async {
+    if (_isGpsFollowActive) {
+      _isGpsFollowActive = false;
+      _gpsFollowStream.add(_isGpsFollowActive);
+    }
+  }
 }

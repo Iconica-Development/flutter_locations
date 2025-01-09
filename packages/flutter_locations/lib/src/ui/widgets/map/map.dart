@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
+import "package:flutter_locations/src/ui/widgets/map/location_marker.dart";
 import "package:flutter_locations/src/util/scope.dart";
 import "package:flutter_map/flutter_map.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
@@ -30,6 +31,7 @@ class LocationsMap extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var options = LocationsScope.of(context).options.mapOptions;
+    var repository = LocationsScope.of(context).options.respositoryInterface;
     var defaultZoom = (options.initialLocation == null) ? 7.25 : 10.0;
     var platformMapController =
         useState<platform_maps.PlatformMapController?>(null);
@@ -69,6 +71,12 @@ class LocationsMap extends HookWidget {
     );
 
     var layers = [
+      if (options.enableOpenMapsTileLayer) ...[
+        TileLayer(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          tileProvider: options.tileProvider,
+        ),
+      ],
       MarkerClusterLayerWidget(
         options: MarkerClusterLayerOptions(
           markers: markers.value,
@@ -91,11 +99,17 @@ class LocationsMap extends HookWidget {
           ),
         ),
       ),
+      const CurrentLocationMarker(),
       ...options.additionalLayers,
     ];
 
     // ignore: avoid_positional_boolean_parameters
     Future<void> alignMaps(MapCamera position, bool hasGesture) async {
+      if (hasGesture) {
+        // Disable GPS follow if the user interacts with the map
+        await repository.setGpsFollowInactive();
+      }
+
       await platformMapController.value?.moveCamera(
         platform_maps.CameraUpdate.newCameraPosition(
           platform_maps.CameraPosition(
@@ -120,7 +134,9 @@ class LocationsMap extends HookWidget {
 
     return Stack(
       children: [
-        buildPlatformSpecificMap(),
+        if (!options.enableOpenMapsTileLayer) ...[
+          buildPlatformSpecificMap(),
+        ],
         FlutterMap(
           mapController: controller,
           options: MapOptions(
@@ -129,6 +145,11 @@ class LocationsMap extends HookWidget {
             initialCenter: initialLatLng,
             initialZoom: initialZoom,
             onMapReady: initializeMaps,
+            interactionOptions: const InteractionOptions(
+              enableMultiFingerGestureRace: true,
+              flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              pinchMoveThreshold: 20.0,
+            ),
           ),
           children: layers,
         ),
