@@ -83,7 +83,16 @@ class MapControl {
   /// Gps [MapControl]
   factory MapControl.gps() => MapControl(
         icon: Icons.gps_fixed,
-        onPressed: (_, __) {},
+        onPressed: (controller, repository) async {
+          // check what the current state to see if the current location marker
+          // should also be enabled
+          var currentState = await repository.isGpsFollowActive().first;
+          await repository.toggleGpsFollow();
+          if (!currentState) {
+            await repository.setCurrentLocationMarkerActive();
+          }
+        },
+        enabled: (repository) => repository.isGpsFollowActive(),
       );
 
   /// Zoom in [MapControl]

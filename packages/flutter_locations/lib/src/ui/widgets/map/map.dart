@@ -31,6 +31,7 @@ class LocationsMap extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var options = LocationsScope.of(context).options.mapOptions;
+    var repository = LocationsScope.of(context).options.respositoryInterface;
     var defaultZoom = (options.initialLocation == null) ? 7.25 : 10.0;
     var platformMapController =
         useState<platform_maps.PlatformMapController?>(null);
@@ -104,6 +105,11 @@ class LocationsMap extends HookWidget {
 
     // ignore: avoid_positional_boolean_parameters
     Future<void> alignMaps(MapCamera position, bool hasGesture) async {
+      if (hasGesture) {
+        // Disable GPS follow if the user interacts with the map
+        await repository.setGpsFollowInactive();
+      }
+
       await platformMapController.value?.moveCamera(
         platform_maps.CameraUpdate.newCameraPosition(
           platform_maps.CameraPosition(
