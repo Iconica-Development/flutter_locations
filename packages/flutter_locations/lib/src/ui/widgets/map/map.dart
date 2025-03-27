@@ -144,6 +144,8 @@ class LocationsMap extends HookWidget {
             backgroundColor: Colors.transparent,
             initialCenter: initialLatLng,
             initialZoom: initialZoom,
+            maxZoom: options.maxZoom,
+            minZoom: options.minZoom,
             onMapReady: initializeMaps,
             interactionOptions: const InteractionOptions(
               enableMultiFingerGestureRace: true,

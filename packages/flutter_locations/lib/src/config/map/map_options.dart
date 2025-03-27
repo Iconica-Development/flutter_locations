@@ -10,6 +10,8 @@ class LocationsMapOptions {
   /// [LocationsMapOptions] constructor
   const LocationsMapOptions({
     this.zoom,
+    this.maxZoom = 18.0,
+    this.minZoom = 3.0,
     this.initialLocation = const Location(latitude: 0, longitude: 0),
     this.additionalLayers = const [],
     this.onMapReady,
@@ -25,6 +27,8 @@ class LocationsMapOptions {
     this.additionalLayers = const [],
     this.initialLocation = const Location(latitude: 0, longitude: 0),
     this.zoom,
+    this.maxZoom = 18.0,
+    this.minZoom = 3.0,
     this.onMapReady,
     this.searchBuilder = DefaultLocationsMapSearch.builder,
     this.markerBuilder = DefaultLocationsMapMarker.builder,
@@ -44,6 +48,18 @@ class LocationsMapOptions {
 
   /// A double containing the zoom level currently used by the MapController.
   final double? zoom;
+
+  /// A double containing the maximum zoom level for the map if not set it will
+  /// default to 18.0.
+  /// Setting this higher might cause the map to zoom in further than the native
+  /// maps can handle.
+  final double maxZoom;
+
+  /// A double containing the minimum zoom level for the map if not set it will
+  /// default to 3.0.
+  /// Setting this lower might cause the map to zoom out further than the native
+  /// maps can handle.
+  final double minZoom;
 
   /// Builds the search bar
   final LocationMapSearchBuilder searchBuilder;
