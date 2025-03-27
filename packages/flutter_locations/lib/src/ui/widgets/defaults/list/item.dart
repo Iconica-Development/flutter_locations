@@ -49,13 +49,13 @@ class DefaultLocationsListItem<T extends LocationItem> extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      location.locationTitle!,
+                      location.locationTitle ?? "",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      location.locationDescription!,
+                      location.locationDescription ?? "",
                     ),
                   ],
                 ),
