@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
@@ -110,15 +112,20 @@ class LocationsMap extends HookWidget {
         await repository.setGpsFollowInactive();
       }
 
+      var LatLngBounds(
+        north: north,
+        east: east,
+        south: south,
+        west: west,
+      ) = position.visibleBounds;
+
       await platformMapController.value?.moveCamera(
-        platform_maps.CameraUpdate.newCameraPosition(
-          platform_maps.CameraPosition(
-            target: platform_maps.LatLng(
-              position.center.latitude,
-              position.center.longitude,
-            ),
-            zoom: position.zoom,
+        platform_maps.CameraUpdate.newLatLngBounds(
+          platform_maps.LatLngBounds(
+            southwest: platform_maps.LatLng(south, west),
+            northeast: platform_maps.LatLng(north, east),
           ),
+          0,
         ),
       );
       onSetBounds(position.visibleBounds);
