@@ -4,13 +4,13 @@ repos:
     hooks:
       - id: dart-format
         args: [
-            apps/example
+            apps/locations_example
             packages/flutter_locations
             packages/dart_locations_repository_interface,
           ]
       - id: flutter-analyze
         args: [
-            apps/example
+            apps/locations_example
             packages/flutter_locations
             packages/dart_locations_repository_interface,
           ]

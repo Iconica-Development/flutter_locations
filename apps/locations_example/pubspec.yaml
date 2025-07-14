@@ -1,7 +1,9 @@
-name: example
+name: flutter_locations_example
 description: "Flutter Locations userstory example app"
 
 version: 1.0.0+1
+publish_to: none
+
 environment:
   sdk: ">=3.4.3 <4.0.0"
 
@@ -10,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_locations:
-    hosted: https://forgejo.internal.iconica.nl/api/packages/internal/pub
-    version: ^1.0.0
+    path: ../../packages/flutter_locations
   flutter_map_cancellable_tile_provider: ^3.0.2
 
 dev_dependencies:
