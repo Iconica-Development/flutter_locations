@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import "package:flutter/material.dart";
 import "package:flutter_locations/flutter_locations.dart";
 import "package:flutter_locations/src/config/list/list_options.dart";
@@ -29,6 +30,24 @@ class LocationsOptions {
 
   /// The list options.
   final LocationsListOptions listOptions;
+
+  LocationsOptions copy(LocationsOptions Function(LocationsOptions old) copy) =>
+      copy(this);
+
+  LocationsOptions copyWith({
+    LocationsRepositoryInterface? respositoryInterface,
+    LocationsTranslations? translations,
+    LocationsBaseScreenBuilder? builder,
+    LocationsMapOptions? mapOptions,
+    LocationsListOptions? listOptions,
+  }) =>
+      LocationsOptions(
+        respositoryInterface: respositoryInterface ?? this.respositoryInterface,
+        translations: translations ?? this.translations,
+        builder: builder ?? this.builder,
+        mapOptions: mapOptions ?? this.mapOptions,
+        listOptions: listOptions ?? this.listOptions,
+      );
 }
 
 ///

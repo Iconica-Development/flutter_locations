@@ -4,8 +4,6 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
 import "package:flutter_locations/src/ui/widgets/map/location_marker.dart";
-import "package:flutter_locations/src/util/scope.dart";
-import "package:flutter_map/flutter_map.dart";
 import "package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart";
 import "package:latlong2/latlong.dart";
 import "package:platform_maps_flutter/platform_maps_flutter.dart"
@@ -87,22 +85,16 @@ class LocationsMap extends HookWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.all(50),
           maxZoom: 15,
-          builder: (context, markers) => DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).colorScheme.surfaceTint,
-            ),
-            child: Center(
-              child: Text(
-                markers.length.toString(),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+          builder: options.markerClusterBuilder,
         ),
       ),
       const CurrentLocationMarker(),
-      ...options.additionalLayers,
+      ...options.additionalLayers.map(
+        (widget) => IgnorePointer(
+          ignoring: true,
+          child: widget,
+        ),
+      ),
     ];
 
     // ignore: avoid_positional_boolean_parameters
