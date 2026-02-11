@@ -26,14 +26,17 @@ class CurrentLocationMarker extends HookWidget {
       return const SizedBox.shrink();
     }
 
-    return CurrentLocationLayer(
-      // force the widget to rebuild when the gps follow state changes
-      key: ValueKey(isGpsFollowActive.data),
-      alignPositionOnUpdate: isGpsFollowActive.data ?? false
-          ? AlignOnUpdate.always
-          : AlignOnUpdate.never,
-      alignDirectionOnUpdate: AlignOnUpdate.never,
-      headingStream: const Stream.empty(),
+    return IgnorePointer(
+      ignoring: true,
+      child: CurrentLocationLayer(
+        // force the widget to rebuild when the gps follow state changes
+        key: ValueKey(isGpsFollowActive.data),
+        alignPositionOnUpdate: isGpsFollowActive.data ?? false
+            ? AlignOnUpdate.always
+            : AlignOnUpdate.never,
+        alignDirectionOnUpdate: AlignOnUpdate.never,
+        headingStream: const Stream.empty(),
+      ),
     );
   }
 }

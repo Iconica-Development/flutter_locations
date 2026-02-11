@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_locations/flutter_locations.dart";
-import "package:flutter_locations/src/util/scope.dart";
 
 /// Widget holding the builder.
 class LocationsList extends StatelessWidget {

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import "package:dart_locations_repository_interface/dart_locations_repository_interface.dart";
 import "package:flutter/material.dart";
 import "package:flutter_locations/src/config/map/controls_options.dart";
@@ -9,6 +10,7 @@ import "package:flutter_map/flutter_map.dart";
 class LocationsMapOptions {
   /// [LocationsMapOptions] constructor
   const LocationsMapOptions({
+    this.controller,
     this.zoom,
     this.maxZoom = 18.0,
     this.minZoom = 3.0,
@@ -17,6 +19,7 @@ class LocationsMapOptions {
     this.onMapReady,
     this.searchBuilder = DefaultLocationsMapSearch.builder,
     this.markerBuilder = DefaultLocationsMapMarker.builder,
+    this.markerClusterBuilder = DefaultLocationsMapMarkerCluster.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
     this.enableOpenMapsTileLayer = false,
     this.tileProvider,
@@ -24,6 +27,7 @@ class LocationsMapOptions {
 
   ///
   const LocationsMapOptions.empty({
+    this.controller,
     this.additionalLayers = const [],
     this.initialLocation = const Location(latitude: 0, longitude: 0),
     this.zoom,
@@ -32,10 +36,14 @@ class LocationsMapOptions {
     this.onMapReady,
     this.searchBuilder = DefaultLocationsMapSearch.builder,
     this.markerBuilder = DefaultLocationsMapMarker.builder,
+    this.markerClusterBuilder = DefaultLocationsMapMarkerCluster.builder,
     this.controlsOptions = const LocationsMapControlsOptions.empty(),
     this.enableOpenMapsTileLayer = false,
     this.tileProvider,
   });
+
+  ///
+  final MapController? controller;
 
   /// The layers containing everything other than the actual tilelayer.
   final List<Widget> additionalLayers;
@@ -68,6 +76,9 @@ class LocationsMapOptions {
   final LocationMapMarkerBuilder markerBuilder;
 
   ///
+  final LocationMapMarkerClusterBuilder markerClusterBuilder;
+
+  ///
   final LocationsMapControlsOptions controlsOptions;
 
   /// Enables the open maps tile layer from flutter_map that uses openstreetmap.
@@ -75,9 +86,41 @@ class LocationsMapOptions {
   final bool enableOpenMapsTileLayer;
 
   /// [TileProvider] used of the openmaps tile layer. This can be used to add
-  /// CancellableNetworkTileProvider or other tile providers to improve
+  /// NetworkTileProvider or other tile providers to improve
   /// performance without creating a dependency in flutter_locations.
   final TileProvider? tileProvider;
+
+  LocationsMapOptions copyWith({
+    MapController? controller,
+    List<Widget>? additionalLayers,
+    Location? initialLocation,
+    VoidCallback? onMapReady,
+    double? zoom,
+    double? maxZoom,
+    double? minZoom,
+    LocationMapSearchBuilder? searchBuilder,
+    LocationMapMarkerBuilder? markerBuilder,
+    LocationMapMarkerClusterBuilder? markerClusterBuilder,
+    LocationsMapControlsOptions? controlsOptions,
+    bool? enableOpenMapsTileLayer,
+    TileProvider? tileProvider,
+  }) =>
+      LocationsMapOptions(
+        controller: controller ?? this.controller,
+        additionalLayers: additionalLayers ?? this.additionalLayers,
+        initialLocation: initialLocation ?? this.initialLocation,
+        onMapReady: onMapReady ?? this.onMapReady,
+        zoom: zoom ?? this.zoom,
+        maxZoom: maxZoom ?? this.maxZoom,
+        minZoom: minZoom ?? this.minZoom,
+        searchBuilder: searchBuilder ?? this.searchBuilder,
+        markerBuilder: markerBuilder ?? this.markerBuilder,
+        markerClusterBuilder: markerClusterBuilder ?? this.markerClusterBuilder,
+        controlsOptions: controlsOptions ?? this.controlsOptions,
+        enableOpenMapsTileLayer:
+            enableOpenMapsTileLayer ?? this.enableOpenMapsTileLayer,
+        tileProvider: tileProvider ?? this.tileProvider,
+      );
 }
 
 ///
@@ -91,4 +134,10 @@ typedef LocationMapSearchBuilder = Widget Function(
 typedef LocationMapMarkerBuilder = Widget Function(
   BuildContext context,
   LocationItem locationItem,
+);
+
+///
+typedef LocationMapMarkerClusterBuilder = Widget Function(
+  BuildContext,
+  List<Marker> markers,
 );

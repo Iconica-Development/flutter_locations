@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_locations/flutter_locations.dart";
-import "package:flutter_locations/src/util/scope.dart";
 
 /// A widget that lists the locations.
 class DefaultLocationsList<T extends LocationItem> extends HookWidget {
