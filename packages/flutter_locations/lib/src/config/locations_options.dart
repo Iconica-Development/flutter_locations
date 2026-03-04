@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import "package:flutter/material.dart";
 import "package:flutter_locations/flutter_locations.dart";
-import "package:flutter_locations/src/config/list/list_options.dart";
 import "package:flutter_locations/src/ui/widgets/defaults/base_screen.dart";
 
 /// Class holding all the options for [LocationsUserStory].

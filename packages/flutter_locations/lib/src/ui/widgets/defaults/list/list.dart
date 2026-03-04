@@ -34,9 +34,7 @@ class DefaultLocationsList<T extends LocationItem> extends HookWidget {
 
     locationStream.listen(
       (locationItems) => locations.value = locationItems
-          .map(
-            (e) => listItemOptions.listBuilder(context, e),
-          )
+          .map((e) => listItemOptions.listBuilder(context, e))
           .toList(),
     );
 
